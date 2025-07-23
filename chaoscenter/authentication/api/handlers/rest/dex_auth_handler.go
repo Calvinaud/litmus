@@ -29,7 +29,7 @@ func oAuthDexConfig() (*oauth2.Config, *oidc.IDTokenVerifier, error) {
 		RedirectURL:  utils.DexCallBackURL,
 		ClientID:     utils.DexClientID,
 		ClientSecret: utils.DexClientSecret,
-		Scopes:       []string{"openid", "profile", "email"},
+		Scopes:       []string{"openid", "profile", "email", "sub"},
 		Endpoint:     provider.Endpoint(),
 	}, provider.Verifier(&oidc.Config{ClientID: utils.DexClientID}), nil
 }
@@ -113,6 +113,7 @@ func DexCallback(userService services.ApplicationService) gin.HandlerFunc {
 			Name     string
 			Email    string `json:"email"`
 			Verified bool   `json:"email_verified"`
+			Sub   	 string `json:"sub"`
 		}
 		if err := idToken.Claims(&claims); err != nil {
 			log.Error("OAuth Error: claims not found")
@@ -125,6 +126,7 @@ func DexCallback(userService services.ApplicationService) gin.HandlerFunc {
 			Name:     claims.Name,
 			Email:    claims.Email,
 			Username: claims.Email,
+			DexClientID: claims.Sub,
 			Role:     entities.RoleUser,
 			Audit: entities.Audit{
 				CreatedAt: createdAt,

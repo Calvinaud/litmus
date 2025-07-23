@@ -27,6 +27,7 @@ type User struct {
 	Role           Role   `bson:"role,omitempty" json:"role"`
 	DeactivatedAt  *int64 `bson:"deactivated_at,omitempty" json:"deactivatedAt,omitempty"`
 	IsInitialLogin bool   `bson:"is_initial_login" json:"isInitialLogin"`
+	DexClientID    string `bson:"dex_client_id,omitempty" json:"dexClientID,omitempty"`
 }
 
 // UserDetails is used to update user's personal details

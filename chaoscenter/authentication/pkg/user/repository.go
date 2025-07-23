@@ -53,6 +53,11 @@ func (r repository) LoginUser(user *entities.User) (*entities.User, error) {
 			findOneErr := r.Collection.FindOne(context.TODO(), bson.M{
 				"username": user.Username,
 			}).Decode(&result)
+			
+			findOneErrDex := r.Collection.FindOne(context.TODO(), bson.M{
+				"dex_client_id": user.DexClientID,
+			}).Decode(&result)
+
 			if findOneErr != nil {
 				return nil, findOneErr
 			}
